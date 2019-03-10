@@ -1,4 +1,4 @@
-var mezok, megoldasok, megoldokulcs,eredmeny, utolsoFeladat; // Hibakereses
+var mezok, bejeloltek, megoldokulcs, utolsoFeladat, eredmeny; // Hibakereses
 var abc = "ABCDE";
 function tombbe(mit) {
 	var eredmeny = [false,false,false,false,false];
@@ -39,25 +39,19 @@ function ertekelFeladat(megoldokulcs,bejelolt) {
 function kiszamol() {
 	mezok = document.querySelectorAll("table input");
 	utolsoFeladat = document.getElementById("feladat14").value*1;
-	megoldasok = new Array();
+	bejeloltek = new Array();
 	megoldokulcs = new Array();
+	eredmeny = 0;
 	for(let i = 0;i<mezok.length;i++) {
 		if (i % 2 == 0) {
-			megoldasok[i/2] = mezok[i].value;
+			bejeloltek[i/2] = tombbe(mezok[i].value.toUpperCase());
 		} else {
-			megoldokulcs[(i-1)/2] = mezok[i].value;
+			megoldokulcs[(i-1)/2] = tombbe(mezok[i].value.toUpperCase());
 		}
 	}
-	for(let i = 0;i<megoldokulcs.length;i++) {
-		megoldokulcs[i] = tombbe(megoldokulcs[i]);
-	}
-	for(let i = 0;i<megoldasok.length;i++) {
-		megoldasok[i] = tombbe(megoldasok[i]);
-	}
-	for(let i = 0;i<megoldokulcs.length;i++) {
-		var eredmeny = new Number();
-		eredmeny += ertekelFeladat(megoldokulcs[i],megoldasok[i])
+	for(var i = 0;i<megoldokulcs.length;i++) {
+		eredmeny = eredmeny + ertekelFeladat(megoldokulcs[i],bejeloltek[i]);
 	}
 	eredmeny += utolsoFeladat;
-	document.querySelector("#eredmeny").value = eredmeny;
+	document.querySelector("#eredmeny").innerHTML = eredmeny;
 }
