@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="windows-1250">
+	</head>
+	<body>
+		<table>
+			<tr><td></td><td>Bejelöltek</td><td>Megoldókulcs</td></tr>
+			<tr><td>1</td><td><input type="text"></td><td><input type="text"></td></tr>
+			<tr><td>2</td><td><input type="text"></td><td><input type="text"></td></tr>
+			<tr><td>3</td><td><input type="text"></td><td><input type="text"></td></tr>
+			<tr><td>4</td><td><input type="text"></td><td><input type="text"></td></tr>
+			<tr><td>5</td><td><input type="text"></td><td><input type="text"></td></tr>
+			<tr><td>6</td><td><input type="text"></td><td><input type="text"></td></tr>
+			<tr><td>7</td><td><input type="text"></td><td><input type="text"></td></tr>
+			<tr><td>8</td><td><input type="text"></td><td><input type="text"></td></tr>
+			<tr><td>9</td><td><input type="text"></td><td><input type="text"></td></tr>
+			<tr><td>10</td><td><input type="text"></td><td><input type="text"></td></tr>
+			<tr><td>11</td><td><input type="text"></td><td><input type="text"></td></tr>
+			<tr><td>12</td><td><input type="text"></td><td><input type="text"></td></tr>
+			<tr><td>13</td><td><input type="text"></td><td><input type="text"></td></tr>
+		</table>
+		14 Elért pontszám : <input type="text" id="feladat14"> <br>
+		<input type="button" value="Kiszámol" onclick="kiszamol()" > <br>
+		Eredmény : <span id="eredmeny" ></span>
+	<script src="conf.js"></script>
+	<script src="bolyai.js"></script>
+<script>
+window.beallitas = {
+	helyesBejelol : 3,
+	rosszBejelol : -1,
+	helyesUres : 2,
+	rosszUres : 0,
+	hibatlanFeladatBonusz : 2,
+	maxPont14 : 16
+}
+var mezok, bejeloltek, megoldokulcs, utolsoFeladat, eredmeny; // Hibakereses
+var abc = "ABCDE";
+function tombbe(mit) {
+	var eredmeny = [false,false,false,false,false];
+	for (let i=0;i<5;i++) {
+		var char = mit.charAt(i)
+		if (abc.indexOf(char) > -1 && char != "") {
+			eredmeny[abc.indexOf(char)] = true;
+		} 
+	}
+	return eredmeny;
+}
+function osszevet(megoldas, bejelolt){
+	var eredmeny = new Number()
+	for(let i = 0;i<megoldas.length;i++) {
+		if (megoldas[i] && bejelolt[i]) {
+			eredmeny += beallitas.helyesBejelol;
+		}
+		if (megoldas[i] && !bejelolt[i]) {
+			eredmeny += beallitas.rosszUres;
+		}
+		if (!megoldas[i] && bejelolt[i]) {
+			eredmeny += beallitas.rosszBejelol;
+		}
+		if (!megoldas[i] && !bejelolt[i]) {
+			eredmeny += beallitas.helyesUres;
+		}
+	}
+	return eredmeny;
+}
+
+function kiszamol() {
+	mezok = document.querySelectorAll("table input");
+	utolsoFeladat = document.getElementById("feladat14").value*1;
+	bejeloltek = new Array();
+	megoldokulcs = new Array();
+	for(let i = 0;i<mezok.length;i++) {
+		if (i % 2 == 0) {
+			bejeloltek[i/2] = tombbe(mezok[i].value.toUpperCase());
+		} else {
+			megoldokulcs[(i-1)/2] = tombbe(mezok[i].value.toUpperCase());
+		}
+	}
+	for(var i = 0, eredmeny = 0 ;i<megoldokulcs.length;i++) {
+		eredmeny += osszevet(megoldokulcs[i],bejeloltek[i]);
+		for (y=0,hibatlan=true;y<5;y++)  {
+			if (megoldokulcs[i][y] != bejeloltek[i][y]) {
+				hibatlan = false;
+			}
+		}
+		if (hibatlan) {eredmeny += beallitas.hibatlanFeladatBonusz;}
+	}
+	eredmeny += utolsoFeladat;
+	document.querySelector("#eredmeny").innerHTML = eredmeny;
+}
+
+ </script>
+	</body>
+</html>
